@@ -48,7 +48,7 @@ public class NeuroniaTest {
         createExperienceCard();
         assertEquals(1, rubbish.actionQueueSize());
         rubbish.performActions();
-        assertEquals(5, rubbish.actionQueueSize());
+        assertEquals(6, rubbish.actionQueueSize());
         rubbish.performActions();
 
         createPathwayCard();
