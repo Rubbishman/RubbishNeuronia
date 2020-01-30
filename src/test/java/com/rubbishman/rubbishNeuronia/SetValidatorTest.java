@@ -1,14 +1,16 @@
 package com.rubbishman.rubbishNeuronia;
 
 import com.google.common.collect.ImmutableList;
-import com.rubbishman.rubbishRedux.internal.neuronia.CostValidator.CostValidator;
-import com.rubbishman.rubbishRedux.internal.neuronia.state.brain.Concept;
-import com.rubbishman.rubbishRedux.internal.neuronia.state.cost.SetValidator;
+import com.rubbishman.rubbishNeuronia.CostValidator.CostValidator;
+import com.rubbishman.rubbishNeuronia.state.brain.Concept;
+import com.rubbishman.rubbishNeuronia.state.cost.SetValidator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 import java.util.Collection;
+
+import static org.junit.Assert.assertEquals;
 
 @RunWith(Parameterized.class)
 public class SetValidatorTest {

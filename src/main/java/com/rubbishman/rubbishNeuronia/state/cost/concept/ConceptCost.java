@@ -1,7 +1,7 @@
 package com.rubbishman.rubbishNeuronia.state.cost.concept;
 
 import com.google.common.collect.ImmutableList;
-import com.rubbishman.rubbishRedux.internal.neuronia.state.brain.Concept;
+import com.rubbishman.rubbishNeuronia.state.brain.Concept;
 
 public class ConceptCost {
     public final Concept cost;

@@ -1,7 +1,7 @@
 package com.rubbishman.rubbishNeuronia.action;
 
+import com.rubbishman.rubbishNeuronia.state.card.pathway.Movement;
 import com.rubbishman.rubbishRedux.external.operational.store.Identifier;
-import com.rubbishman.rubbishRedux.internal.neuronia.state.card.pathway.Movement;
 
 public class PathwayMovement {
     public final Identifier brainId;

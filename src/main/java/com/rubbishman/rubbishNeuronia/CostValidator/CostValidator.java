@@ -1,9 +1,9 @@
 package com.rubbishman.rubbishNeuronia.CostValidator;
 
 import com.google.common.collect.ImmutableList;
-import com.rubbishman.rubbishRedux.internal.neuronia.state.brain.Concept;
-import com.rubbishman.rubbishRedux.internal.neuronia.state.cost.ArrayValidator;
-import com.rubbishman.rubbishRedux.internal.neuronia.state.cost.SetValidator;
+import com.rubbishman.rubbishNeuronia.state.brain.Concept;
+import com.rubbishman.rubbishNeuronia.state.cost.ArrayValidator;
+import com.rubbishman.rubbishNeuronia.state.cost.SetValidator;
 
 import java.util.ArrayList;
 

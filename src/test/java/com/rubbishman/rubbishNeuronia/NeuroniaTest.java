@@ -7,7 +7,6 @@ import com.rubbishman.rubbishRedux.external.operational.store.IdObject;
 import com.rubbishman.rubbishRedux.external.operational.store.Identifier;
 import com.rubbishman.rubbishRedux.external.setup.RubbishContainerCreator;
 import com.rubbishman.rubbishRedux.external.setup.RubbishContainerOptions;
-import com.rubbishman.rubbishRedux.internal.misc.MyLoggingMiddleware;
 import com.rubbishman.rubbishNeuronia.action.EndTurn;
 import com.rubbishman.rubbishNeuronia.action.PlayCard;
 import com.rubbishman.rubbishNeuronia.reducer.NeuroniaReducer;
@@ -23,38 +22,22 @@ import com.rubbishman.rubbishNeuronia.state.card.pathway.PathwayCard;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.OutputStream;
-import java.io.PrintStream;
-
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 public class NeuroniaTest {
     public static Identifier brainId;
 
     private RubbishContainer rubbish;
-    private PrintStream printStream;
     private StringBuilder stringBuilder = new StringBuilder();
     @Before
     public void setup() {
         RubbishContainerOptions options = new RubbishContainerOptions();
-        setupStringLogger(options);
 
         options
                 .setReducer(new NeuroniaReducer());
 
         rubbish = RubbishContainerCreator.getRubbishContainer(options);
-    }
-
-    public void setupStringLogger(RubbishContainerOptions options) {
-        OutputStream myOutput = new OutputStream() {
-            public void write(int b) {
-                stringBuilder.append((char)b);
-            }
-        };
-
-        printStream = new PrintStream(myOutput);
-
-        options.addMiddleware(new MyLoggingMiddleware(printStream, "MOO"));
     }
 
     @Test

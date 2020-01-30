@@ -1,8 +1,8 @@
 package com.rubbishman.rubbishNeuronia.state.brain;
 
 import com.google.common.collect.ImmutableList;
-import com.rubbishman.rubbishRedux.internal.neuronia.state.InitialThoughtLocation;
-import com.rubbishman.rubbishRedux.internal.neuronia.state.ThoughtLocationTransition;
+import com.rubbishman.rubbishNeuronia.state.InitialThoughtLocation;
+import com.rubbishman.rubbishNeuronia.state.ThoughtLocationTransition;
 import org.organicdesign.fp.collections.PersistentHashMap;
 
 public class Brain {
