@@ -68,7 +68,7 @@ public class NeuroniaReducer extends IRubbishReducer {
 
         if(ctMovement.pickup) {
             if(brain.hasConcept(locTransition.x, locTransition.y)) {
-                brain = brain.pickupConcept(locTransition.x, locTransition.y);
+                brain = brain.pickupConcept(locTransition.x, locTransition.y, ctMovement.pickup);
                 state = state.setObject(ctMovement.brainId, brain);
             }
         }

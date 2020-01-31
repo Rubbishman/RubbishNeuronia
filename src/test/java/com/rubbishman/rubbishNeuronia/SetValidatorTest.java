@@ -1,7 +1,7 @@
 package com.rubbishman.rubbishNeuronia;
 
 import com.google.common.collect.ImmutableList;
-import com.rubbishman.rubbishNeuronia.CostValidator.CostValidator;
+import com.rubbishman.rubbishNeuronia.costValidator.CostValidator;
 import com.rubbishman.rubbishNeuronia.state.brain.Concept;
 import com.rubbishman.rubbishNeuronia.state.cost.SetValidator;
 import org.junit.Test;

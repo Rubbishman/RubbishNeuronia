@@ -3,11 +3,12 @@ package com.rubbishman.rubbishNeuronia.state.brain;
 import com.google.common.collect.ImmutableList;
 import com.rubbishman.rubbishNeuronia.state.InitialThoughtLocation;
 import com.rubbishman.rubbishNeuronia.state.ThoughtLocationTransition;
+import com.rubbishman.rubbishNeuronia.state.cost.concept.ConceptTrace;
 import org.organicdesign.fp.collections.PersistentHashMap;
 
 public class Brain {
     private final PersistentHashMap<Integer, PersistentHashMap<Integer, ImmutableList<Concept>>> inBrainConcepts;
-    public final ImmutableList<Concept> activeMemory;
+    public final ImmutableList<ConceptTrace> activeMemory;
     public final ImmutableList<Concept> conceptReserve;
     public final ThoughtLocationTransition currentThoughtLocation;
     public final InitialThoughtLocation initialThoughtLocation;
@@ -30,7 +31,7 @@ public class Brain {
     }
 
     public Brain(PersistentHashMap<Integer, PersistentHashMap<Integer, ImmutableList<Concept>>> inBrainConcepts,
-                 ImmutableList<Concept> activeMemory,
+                 ImmutableList<ConceptTrace> activeMemory,
                  ImmutableList<Concept> conceptReserve,
                  ThoughtLocationTransition currentThoughtLocation,
                  InitialThoughtLocation initialThoughtLocation) {
@@ -67,13 +68,13 @@ public class Brain {
         return new ConceptTree(null,PersistentHashMap.empty());
     }
 
-    public Brain pickupConcept(int x, int y) {
+    public Brain pickupConcept(int x, int y, boolean pickup) {
         ConceptTree conceptTree = traverseConceptTree(x, y);
         if(conceptTree.concepts != null) {
             Concept concept = conceptTree.concepts.get(conceptTree.concepts.size()-1);
             return new Brain(
                     inBrainConcepts.assoc(x, conceptTree.xCoord.assoc(y, conceptTree.concepts.subList(0, conceptTree.concepts.size()-1))),
-                    ImmutableList.<Concept>builder().addAll(activeMemory).add(concept).build(),
+                    ImmutableList.<ConceptTrace>builder().addAll(activeMemory).add(new ConceptTrace(concept, pickup)).build(),
                     conceptReserve,
                     currentThoughtLocation,
                     initialThoughtLocation
@@ -99,7 +100,13 @@ public class Brain {
         return new Brain(
                 inBrainConcepts,
                 ImmutableList.of(),
-                ImmutableList.<Concept>builder().addAll(conceptReserve).addAll(activeMemory).build(),
+                ImmutableList.<Concept>builder().addAll(conceptReserve).addAll(
+                        activeMemory
+                                .stream()
+                                .filter(conceptTrace -> conceptTrace.pickup)
+                                .map(conceptTrace -> conceptTrace.concept)
+                                .iterator()
+                ).build(),
                 new ThoughtLocationTransition(currentThoughtLocation.x, currentThoughtLocation.y, false, null),
                 new InitialThoughtLocation(currentThoughtLocation.x, currentThoughtLocation.y)
         );
