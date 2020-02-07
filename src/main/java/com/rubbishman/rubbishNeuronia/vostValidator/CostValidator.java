@@ -1,4 +1,4 @@
-package com.rubbishman.rubbishNeuronia.costValidator;
+package com.rubbishman.rubbishNeuronia.vostValidator;
 
 import com.google.common.collect.ImmutableList;
 import com.rubbishman.rubbishNeuronia.state.brain.Concept;

@@ -70,7 +70,7 @@ public class NeuroniaTest {
 
         brain = rubbish.getState().getObject(brainId);
 
-        assertEquals(1, brain.activeMemory.size());
+        assertEquals(2, brain.activeMemory.size());
         assertEquals(0, brain.conceptReserve.size());
 
         rubbish.performAction(new EndTurn(brainId));
