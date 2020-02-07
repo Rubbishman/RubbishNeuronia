@@ -7,6 +7,7 @@ import com.rubbishman.rubbishNeuronia.state.cost.SetValidator;
 import com.rubbishman.rubbishNeuronia.state.cost.concept.ConceptTrace;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class CostValidator {
     /*
@@ -30,6 +31,10 @@ public class CostValidator {
         }
 
         return false;
+    }
+
+    public static void validateArray(Iterator<ConceptTrace> requiredItems, Iterator<ConceptTrace> availableItems) {
+
     }
 
     public static boolean validate(SetValidator setValidator, ImmutableList<ConceptTrace> availableConcepts) {
