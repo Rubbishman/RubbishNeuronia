@@ -1,9 +1,10 @@
 package com.rubbishman.rubbishNeuronia;
 
 import com.google.common.collect.ImmutableList;
-import com.rubbishman.rubbishNeuronia.vostValidator.CostValidator;
+import com.rubbishman.rubbishNeuronia.reducer.costValidator.CostValidator;
 import com.rubbishman.rubbishNeuronia.state.brain.Concept;
 import com.rubbishman.rubbishNeuronia.state.cost.ArrayValidator;
+import com.rubbishman.rubbishNeuronia.state.cost.concept.ConceptTrace;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -24,11 +25,11 @@ public class ArrayValidatorTest {
                                 Concept.RED
                         ),
                         ImmutableList.of(
-                                Concept.TEAL,
-                                Concept.ORANGE,
-                                Concept.BLUE,
-                                Concept.RED,
-                                Concept.GREEN
+                                Concept.TEAL.pickup(),
+                                Concept.ORANGE.pickup(),
+                                Concept.BLUE.pickup(),
+                                Concept.RED.pickup(),
+                                Concept.GREEN.pickup()
                         ),
                         true
                 },
@@ -41,11 +42,11 @@ public class ArrayValidatorTest {
                                 Concept.GREEN
                         ),
                         ImmutableList.of(
-                                Concept.TEAL,
-                                Concept.ORANGE,
-                                Concept.BLUE,
-                                Concept.RED,
-                                Concept.GREEN
+                                Concept.TEAL.pickup(),
+                                Concept.ORANGE.pickup(),
+                                Concept.BLUE.pickup(),
+                                Concept.RED.pickup(),
+                                Concept.GREEN.pickup()
                         ),
                         false
                 },
@@ -58,12 +59,12 @@ public class ArrayValidatorTest {
                                 Concept.GREEN
                         ),
                         ImmutableList.of(
-                                Concept.TEAL,
-                                Concept.ORANGE,
-                                Concept.BLUE,
-                                Concept.RED,
-                                Concept.GREEN,
-                                Concept.GREEN
+                                Concept.TEAL.pickup(),
+                                Concept.ORANGE.pickup(),
+                                Concept.BLUE.pickup(),
+                                Concept.RED.pickup(),
+                                Concept.GREEN.pickup(),
+                                Concept.GREEN.pickup()
                         ),
                         true
                 }
@@ -71,12 +72,12 @@ public class ArrayValidatorTest {
     }
 
     private ImmutableList<Concept> requiredConcepts;
-    private ImmutableList<Concept> availableConcepts;
+    private ImmutableList<ConceptTrace> availableConcepts;
     private boolean pass;
 
     public ArrayValidatorTest(
             ImmutableList<Concept> requiredConcepts,
-            ImmutableList<Concept> availableConcepts,
+            ImmutableList<ConceptTrace> availableConcepts,
             boolean pass
     ) {
         this.requiredConcepts = requiredConcepts;
