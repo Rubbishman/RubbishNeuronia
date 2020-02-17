@@ -99,8 +99,6 @@ public class SolutionChecker {
         );
     }
 
-
-
     public SolutionChecker skipTrace() {
         return new SolutionChecker(
             requiredConcepts,
