@@ -8,134 +8,67 @@ import java.util.List;
 
 public class ArraySolutionChecker {
     public static List<CostSolution> checkSolution(ImmutableList<ConceptTrace> requiredConcepts, ImmutableList<ConceptTrace> availableConcepts) {
-        if(!requiredConcepts.isEmpty() && !availableConcepts.isEmpty()) {
-            return consumeTrace(
+        if (!requiredConcepts.isEmpty() && !availableConcepts.isEmpty()) {
+            return processTrace(new SolutionChecker(
                     requiredConcepts,
-                    availableConcepts,
-                    ImmutableList.of(),
-                    false,
-                    ImmutableList.of()
-            );
+                    availableConcepts
+            ));
         }
         return new LinkedList<>();
     }
 
-    private boolean failedTermination(ImmutableList<ConceptTrace> requiredConcepts, ImmutableList<ConceptTrace> availableConcepts) {
-        if(requiredConcepts.get(0).pickup
-                && availableConcepts.get(0).concept != requiredConcepts.get(0).concept) {
-            return true;
-        }
-
-        if(requiredConcepts.get(0).pickup && !availableConcepts.get(0).pickup) {
-            return true;
-        }
-
-        return false;
-    }
-
-    public boolean isTerminated(ImmutableList<ConceptTrace> requiredConcepts, ImmutableList<ConceptTrace> availableConcepts) {
-        if(requiredConcepts.isEmpty() || availableConcepts.isEmpty()) {
-            return true;
-        }
-
-        if(failedTermination(requiredConcepts, availableConcepts)) {
-            return true;
-        }
-
-        return false;
-    }
-
-    private static List<CostSolution> consumeTrace(
-            ImmutableList<ConceptTrace> requiredConcepts,
-            ImmutableList<ConceptTrace> availableConcepts,
-            ImmutableList<ConceptTrace> partialSolution,
-            boolean startedConsuming,
-            ImmutableList<ConceptTrace> skippedConcepts) {
+    private static List<CostSolution> processTrace(SolutionChecker solutionChecker) {
         List<CostSolution> solutions = new LinkedList<>();
 
-        //Solved
-        if(requiredConcepts.isEmpty() && !partialSolution.isEmpty()) {
-            solutions.add(new CostSolution(
-                partialSolution,
-                availableConcepts
-            ));
+        if (solutionChecker.isSolved()) {
+            solutions.add(solutionChecker.toCostSolution());
 
             return solutions;
         }
 
-        //Could never solve
-        if(requiredConcepts.size() > availableConcepts.size()) {
+        if (solutionChecker.unsolvable()) {
             return solutions;
         }
 
         //Move to the next available and see if we can solve from that instead
-        if(!startedConsuming && availableConcepts.size() > 1) {
-            solutions.addAll(ArraySolutionChecker.consumeTrace(
-                    requiredConcepts,
-                    availableConcepts.subList(1, availableConcepts.size()),
-                    ImmutableList.of(),
-                    false,
-                    ImmutableList.<ConceptTrace>builder()
-                            .addAll(skippedConcepts)
-                            .add(availableConcepts.get(0))
-                            .build()
-            ));
+        if (solutionChecker.canSkipTrace()) {
+            solutions.addAll(
+                ArraySolutionChecker.processTrace(
+                    solutionChecker.skipTrace()
+                )
+            );
         }
 
-        boolean conceptEqual = availableConcepts.get(0).concept == requiredConcepts.get(0).concept;
-        boolean pickupAndEqual = availableConcepts.get(0).pickup
-                && conceptEqual;
-
-        if(requiredConcepts.get(0).pickup
-        ) {
-            if(pickupAndEqual) {
-                solutions.addAll(ArraySolutionChecker.consumeTrace(
-                        requiredConcepts.subList(1, requiredConcepts.size()),
-                        availableConcepts.subList(1, availableConcepts.size()),
-                        ImmutableList.<ConceptTrace>builder()
-                                .addAll(partialSolution)
-                                .add(availableConcepts.get(0))
-                                .build(),
-                        true,
-                        skippedConcepts
-                ));
-            } else if (!availableConcepts.get(0).pickup) {
-                solutions.addAll(ArraySolutionChecker.consumeTrace(
-                        requiredConcepts,
-                        availableConcepts.subList(1, availableConcepts.size()),
-                        ImmutableList.<ConceptTrace>builder()
-                                .addAll(partialSolution)
-                                .add(availableConcepts.get(0))
-                                .build(),
-                        startedConsuming,
-                        skippedConcepts
-                ));
+        if (solutionChecker.requirePickup()) {
+            if (solutionChecker.pickupMatch()) {
+                solutions.addAll(
+                    ArraySolutionChecker.processTrace(
+                        solutionChecker.pickupConceptTrace()
+                    )
+                );
+            } else if (solutionChecker.availableIsStepOver()) {
+                // We want to pick up, but we are skipping the stepOvers.
+                solutions.addAll(
+                    ArraySolutionChecker.processTrace(
+                        solutionChecker.skipTrace()
+                    )
+                );
             }
-        } else if(!requiredConcepts.get(0).pickup && !availableConcepts.get(0).pickup) {
-            if(conceptEqual) { // Try consuming
-                solutions.addAll(ArraySolutionChecker.consumeTrace(
-                        requiredConcepts.subList(1, requiredConcepts.size()),
-                        availableConcepts.subList(1, availableConcepts.size()),
-                        ImmutableList.<ConceptTrace>builder()
-                                .addAll(partialSolution)
-                                .add(availableConcepts.get(0))
-                                .build(),
-                        true,
-                        skippedConcepts
-                ));
+        } else if (solutionChecker.requireStepOverAndAvailableStepOver()) {
+            if (solutionChecker.consumableConceptEqual()) { // Try consuming
+                solutions.addAll(
+                    ArraySolutionChecker.processTrace(
+                        solutionChecker.stepOverConceptTrace()
+                    )
+                );
             }
 
             // Even if it matches, can choose to skip stepOver matches
-            solutions.addAll(ArraySolutionChecker.consumeTrace(
-                    requiredConcepts,
-                    availableConcepts.subList(1, availableConcepts.size()),
-                    ImmutableList.<ConceptTrace>builder()
-                            .addAll(partialSolution)
-                            .add(availableConcepts.get(0))
-                            .build(),
-                    startedConsuming,
-                    skippedConcepts
-            ));
+            solutions.addAll(
+                ArraySolutionChecker.processTrace(
+                    solutionChecker.skipTrace()
+                )
+            );
         }
 
         return solutions;

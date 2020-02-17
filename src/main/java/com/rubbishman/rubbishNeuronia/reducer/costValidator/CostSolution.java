@@ -6,11 +6,11 @@ import com.rubbishman.rubbishNeuronia.state.cost.concept.ConceptTrace;
 public class CostSolution {
     public final ImmutableList<ConceptTrace> costSolution;
     public final ImmutableList<ConceptTrace> remainingItems;
+    public final ImmutableList<ConceptTrace> skippedItems;
 
-    //TODO, also store Concepts that go back to active memory (IE, skipped and stepped over).
-
-    public CostSolution(ImmutableList<ConceptTrace> costSolution, ImmutableList<ConceptTrace> remainingItems) {
+    public CostSolution(ImmutableList<ConceptTrace> costSolution, ImmutableList<ConceptTrace> remainingItems, ImmutableList<ConceptTrace> skippedItems) {
         this.costSolution = costSolution;
         this.remainingItems = remainingItems;
+        this.skippedItems = skippedItems;
     }
 }
