@@ -1,19 +1,26 @@
 package com.rubbishman.rubbishNeuronia.reducer.costValidator;
 
 import com.google.common.collect.ImmutableList;
+import com.rubbishman.rubbishNeuronia.reducer.costValidator.costTypes.CostType;
 import com.rubbishman.rubbishNeuronia.state.cost.concept.ConceptTrace;
 
 import java.util.LinkedList;
 import java.util.List;
 
 public class ArraySolutionChecker {
-    public static List<CostSolution> checkSolution(ImmutableList<ConceptTrace> requiredConcepts, ImmutableList<ConceptTrace> availableConcepts) {
-        if (!requiredConcepts.isEmpty() && !availableConcepts.isEmpty()) {
+    public static List<CostSolution> checkSolution(CostType requiredConcepts, ImmutableList<ConceptTrace> availableConcepts) {
+        SolutionChecker solChecker = new SolutionChecker(
+                requiredConcepts,
+                availableConcepts
+        );
+
+        if (!solChecker.isSolved()) { //If it counts as solved... We have empty input
             return processTrace(new SolutionChecker(
                     requiredConcepts,
                     availableConcepts
             ));
         }
+
         return new LinkedList<>();
     }
 

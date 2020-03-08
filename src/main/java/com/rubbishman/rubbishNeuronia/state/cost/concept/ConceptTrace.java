@@ -1,8 +1,9 @@
 package com.rubbishman.rubbishNeuronia.state.cost.concept;
 
+import com.rubbishman.rubbishNeuronia.reducer.costValidator.costTypes.CostType;
 import com.rubbishman.rubbishNeuronia.state.brain.Concept;
 
-public class ConceptTrace {
+public class ConceptTrace implements CostType {
     public final Concept concept;
     public final boolean pickup;
 
