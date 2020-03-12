@@ -1,7 +1,7 @@
 package com.rubbishman.rubbishNeuronia;
 
 import com.google.common.collect.ImmutableList;
-import com.rubbishman.rubbishNeuronia.reducer.costValidator.ArraySolutionChecker;
+import com.rubbishman.rubbishNeuronia.reducer.costValidator.SolutionFinder;
 import com.rubbishman.rubbishNeuronia.reducer.costValidator.CostSolution;
 import com.rubbishman.rubbishNeuronia.state.brain.Concept;
 import com.rubbishman.rubbishNeuronia.state.cost.concept.ConceptTrace;
@@ -10,7 +10,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 import static org.junit.Assert.assertEquals;
@@ -18,7 +17,7 @@ import static org.junit.Assert.assertEquals;
 import java.util.List;
 
 @RunWith(Parameterized.class)
-public class ArraySolutionCheckerTest {
+public class SolutionFinderTest {
 
         @Parameterized.Parameters
         public static Collection<Object[]> data() {
@@ -148,7 +147,7 @@ public class ArraySolutionCheckerTest {
         private ImmutableList<ConceptTrace> availableConcepts;
         private List<CostSolutionAssertion> solutionAssertions;
 
-        public ArraySolutionCheckerTest(
+        public SolutionFinderTest(
                 ImmutableList<ConceptTrace> requiredConcepts,
                 ImmutableList<ConceptTrace> availableConcepts,
                 List<CostSolutionAssertion> solutionAssertions
@@ -160,7 +159,7 @@ public class ArraySolutionCheckerTest {
 
         @Test
         public void testArrayChecker() {
-            List<CostSolution> solutions = ArraySolutionChecker.checkSolution(requiredConcepts, availableConcepts);
+            List<CostSolution> solutions = SolutionFinder.checkSolution(requiredConcepts, availableConcepts);
 
             assertEquals("Incorrect number of solutions, " + System.lineSeparator() + GsonInstance.getInstance().toJson(requiredConcepts)
                     + System.lineSeparator() + GsonInstance.getInstance().toJson(availableConcepts),

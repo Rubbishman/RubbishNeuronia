@@ -3,7 +3,6 @@ package com.rubbishman.rubbishNeuronia.reducer.costValidator;
 import com.google.common.collect.ImmutableList;
 import com.rubbishman.rubbishNeuronia.reducer.costValidator.costTypes.CostType;
 import com.rubbishman.rubbishNeuronia.reducer.costValidator.costTypes.NullCostType;
-import com.rubbishman.rubbishNeuronia.state.brain.Concept;
 import com.rubbishman.rubbishNeuronia.state.cost.ArrayValidator;
 import com.rubbishman.rubbishNeuronia.state.cost.ListValidator;
 import com.rubbishman.rubbishNeuronia.state.cost.SetValidator;
@@ -45,7 +44,22 @@ public class SolutionChecker {
     }
 
     public boolean unsolvable() {
+        if(requiredConcepts instanceof ConceptTrace && unsolvable((ConceptTrace)requiredConcepts)) {
+            return true;
+        }
         return sizeOf(requiredConcepts) > availableConcepts.size();
+    }
+
+    public boolean unsolvable(ConceptTrace conceptTrace) {
+        if(conceptTrace.pickup
+                && availableConcepts.get(0).pickup
+                && conceptTrace.concept != availableConcepts.get(0).concept) {
+            return true;
+        } else if(!conceptTrace.pickup && availableConcepts.get(0).pickup){
+            return true;
+        }
+
+        return false;
     }
 
     private int sizeOf(CostType costType) {
@@ -72,73 +86,14 @@ public class SolutionChecker {
 
     private boolean canSkipTrace(CostType costType) {
         if(costType instanceof ConceptTrace) {
-            return !((ConceptTrace)costType).pickup;
+            return !((ConceptTrace)costType).pickup
+                    || availableIsStepOver();
         } else if(costType instanceof ArrayValidator) {
             return canSkipTrace(((ArrayValidator)costType).requiredConcepts.get(0));
         } else if(costType instanceof SetValidator) {
             return true;
         }
         return false;
-    }
-
-    public boolean consumableConceptEqual() {
-        return consumableConceptEqual(availableConcepts.get(0).concept, requiredConcepts);
-    }
-
-    private boolean consumableConceptEqual(Concept concept, CostType costType) {
-        if(costType instanceof ConceptTrace) {
-            return concept == ((ConceptTrace) costType).concept;
-        } else if(costType instanceof ArrayValidator) {
-            return concept == getFirstConceptTrace(requiredConcepts).concept;
-        } else if(costType instanceof SetValidator){
-            SetValidator setVal = (SetValidator)costType;
-            for(CostType setCost: setVal.requiredConcepts) {
-                if(consumableConceptEqual(concept, setCost)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    private ConceptTrace getFirstConceptTrace(CostType costType) {
-        if(costType instanceof ConceptTrace) {
-            return (ConceptTrace)requiredConcepts;
-        }
-
-        return getFirstConceptTrace(((ListValidator)requiredConcepts).requiredConcepts.get(0));
-    }
-
-    public boolean pickupMatch() {
-        return consumableConceptEqual()
-                && getFirstConceptTrace(requiredConcepts).pickup
-                && availableConcepts.get(0).pickup;
-    }
-
-    public boolean requirePickup() {
-        return require(true, requiredConcepts);
-    }
-
-    private boolean require(boolean pickup, CostType costType) {
-        if(costType instanceof ConceptTrace) {
-            return pickup == ((ConceptTrace) costType).pickup;
-        } else if(costType instanceof ArrayValidator) {
-            return pickup == getFirstConceptTrace(requiredConcepts).pickup;
-        } else if(costType instanceof SetValidator){
-            SetValidator setVal = (SetValidator)costType;
-            for(CostType setCost: setVal.requiredConcepts) {
-                if(require(pickup, setCost)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    public boolean requireStepOverAndAvailableStepOver() {
-        return !require(false, requiredConcepts) && availableIsStepOver();
     }
 
     public boolean availableIsStepOver() {
@@ -174,7 +129,7 @@ public class SolutionChecker {
     public ArrayList<SolutionChecker> consumeTrace(ArrayValidator arrayVal) {
         ArrayList<SolutionChecker> possibleSolutionCheckers = new ArrayList<>();
 
-        List<CostSolution> solutions = ArraySolutionChecker.processTrace(
+        List<CostSolution> solutions = SolutionFinder.processTrace(
                 new SolutionChecker(
                         arrayVal.requiredConcepts.get(0),
                         availableConcepts,
@@ -208,26 +163,15 @@ public class SolutionChecker {
     public ArrayList<SolutionChecker> consumeTrace(SetValidator setValidator) {
         ArrayList<SolutionChecker> possibleSolutionCheckers = new ArrayList<>();
 
-        ArrayList<CostType> nonMatchingRequired = new ArrayList<>();
-        ArrayList<CostType> matchingRequired = new ArrayList<>();
-        // Find matching and remove it... Then return the rest.
-        for(CostType costType: setValidator.requiredConcepts) {
-            if(consumableConceptEqual(availableConcepts.get(0).concept, costType)) {
-                matchingRequired.add(costType);
-            } else {
-                nonMatchingRequired.add(costType);
-            }
-        }
-
-        for(int i = 0; i < matchingRequired.size(); i++) {
+        for(int i = 0; i < setValidator.requiredConcepts.size(); i++) {
             ImmutableList.Builder<CostType> builder = ImmutableList.builder();
             for(int pre = 0; pre < i; pre++) {
-                builder.add(matchingRequired.get(pre));
+                builder.add(setValidator.requiredConcepts.get(pre));
             }
 
-            List<CostSolution> solutions = ArraySolutionChecker.processTrace(
+            List<CostSolution> solutions = SolutionFinder.processTrace(
                     new SolutionChecker(
-                            matchingRequired.get(i),
+                            setValidator.requiredConcepts.get(i),
                             availableConcepts,
                             partialSolution,
                             startedConsuming,
@@ -235,8 +179,8 @@ public class SolutionChecker {
                     )
             );
 
-            for(int post = i+1; post < matchingRequired.size(); post++) {
-                builder.add(matchingRequired.get(post));
+            for(int post = i+1; post < setValidator.requiredConcepts.size(); post++) {
+                builder.add(setValidator.requiredConcepts.get(post));
             }
 
             for(CostSolution costSolution: solutions) {

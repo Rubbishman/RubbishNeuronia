@@ -7,7 +7,7 @@ import com.rubbishman.rubbishNeuronia.state.cost.concept.ConceptTrace;
 import java.util.LinkedList;
 import java.util.List;
 
-public class ArraySolutionChecker {
+public class SolutionFinder {
     public static List<CostSolution> checkSolution(CostType requiredConcepts, ImmutableList<ConceptTrace> availableConcepts) {
         SolutionChecker solChecker = new SolutionChecker(
                 requiredConcepts,
@@ -40,7 +40,7 @@ public class ArraySolutionChecker {
         //Move to the next available and see if we can solve from that instead
         if (solutionChecker.canSkipTrace()) {
             solutions.addAll(
-                ArraySolutionChecker.processTrace(
+                SolutionFinder.processTrace(
                     solutionChecker.skipTrace()
                 )
             );
@@ -50,7 +50,7 @@ public class ArraySolutionChecker {
 
         for(SolutionChecker nestedSolutionChecker: possibleSolutionCheckers) {
             solutions.addAll(
-                ArraySolutionChecker.processTrace(
+                SolutionFinder.processTrace(
                         nestedSolutionChecker
                 )
             );
