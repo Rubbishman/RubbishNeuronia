@@ -24,7 +24,7 @@ public class ArraySolutionChecker {
         return new LinkedList<>();
     }
 
-    private static List<CostSolution> processTrace(SolutionChecker solutionChecker) {
+    protected static List<CostSolution> processTrace(SolutionChecker solutionChecker) {
         List<CostSolution> solutions = new LinkedList<>();
 
         if (solutionChecker.isSolved()) {
@@ -46,34 +46,12 @@ public class ArraySolutionChecker {
             );
         }
 
-        if (solutionChecker.requirePickup()) {
-            if (solutionChecker.pickupMatch()) {
-                solutions.addAll(
-                    ArraySolutionChecker.processTrace(
-                        solutionChecker.pickupConceptTrace()
-                    )
-                );
-            } else if (solutionChecker.availableIsStepOver()) {
-                // We want to pick up, but we are skipping the stepOvers.
-                solutions.addAll(
-                    ArraySolutionChecker.processTrace(
-                        solutionChecker.skipTrace()
-                    )
-                );
-            }
-        } else if (solutionChecker.requireStepOverAndAvailableStepOver()) {
-            if (solutionChecker.consumableConceptEqual()) { // Try consuming
-                solutions.addAll(
-                    ArraySolutionChecker.processTrace(
-                        solutionChecker.stepOverConceptTrace()
-                    )
-                );
-            }
+        List<SolutionChecker> possibleSolutionCheckers = solutionChecker.consumeTrace();
 
-            // Even if it matches, can choose to skip stepOver matches
+        for(SolutionChecker nestedSolutionChecker: possibleSolutionCheckers) {
             solutions.addAll(
                 ArraySolutionChecker.processTrace(
-                    solutionChecker.skipTrace()
+                        nestedSolutionChecker
                 )
             );
         }
