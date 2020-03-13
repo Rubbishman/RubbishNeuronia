@@ -46,14 +46,16 @@ public class SolutionFinder {
             );
         }
 
-        List<SolutionChecker> possibleSolutionCheckers = solutionChecker.consumeTrace();
+        if(solutionChecker.shouldConsume()) {
+            List<SolutionChecker> possibleSolutionCheckers = solutionChecker.consumeTrace();
 
-        for(SolutionChecker nestedSolutionChecker: possibleSolutionCheckers) {
-            solutions.addAll(
-                SolutionFinder.processTrace(
-                        nestedSolutionChecker
-                )
-            );
+            for(SolutionChecker nestedSolutionChecker: possibleSolutionCheckers) {
+                solutions.addAll(
+                        SolutionFinder.processTrace(
+                                nestedSolutionChecker
+                        )
+                );
+            }
         }
 
         return solutions;

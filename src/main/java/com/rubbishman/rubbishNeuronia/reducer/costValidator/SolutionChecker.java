@@ -108,6 +108,32 @@ public class SolutionChecker {
         );
     }
 
+    public boolean shouldConsume() {
+        if(requiredConcepts instanceof ConceptTrace) {
+            return requiredConcepts.equals(availableConcepts.get(0));
+        } else if(requiredConcepts instanceof ArrayValidator) {
+            return true; //These nest, so try consuming them...?
+        } else if(requiredConcepts instanceof SetValidator) {
+            return true; //These nest, so try consuming them...?
+        }
+
+        return false;
+    }
+
+    public ArrayList<SolutionChecker> consumeTrace() {
+        ArrayList<SolutionChecker> possibleSolutionCheckers = new ArrayList<>();
+
+        if(requiredConcepts instanceof ConceptTrace) {
+            possibleSolutionCheckers.add(consumeTrace((ConceptTrace)requiredConcepts));
+        } else if(requiredConcepts instanceof ArrayValidator) {
+            possibleSolutionCheckers.addAll(consumeTrace((ArrayValidator)requiredConcepts));
+        } else if(requiredConcepts instanceof SetValidator) {
+            possibleSolutionCheckers.addAll(consumeTrace((SetValidator)requiredConcepts));
+        }
+
+        return possibleSolutionCheckers;
+    }
+
     public SolutionChecker consumeTrace(ConceptTrace conceptTrace) {
         return new SolutionChecker(
                 NullCostType.val,
@@ -133,9 +159,9 @@ public class SolutionChecker {
                 new SolutionChecker(
                         arrayVal.requiredConcepts.get(0),
                         availableConcepts,
-                        partialSolution,
+                        ImmutableList.of(),
                         startedConsuming,
-                        skippedConcepts
+                        ImmutableList.of()
                 )
         );
 
@@ -143,10 +169,10 @@ public class SolutionChecker {
             possibleSolutionCheckers.add(
                     new SolutionChecker(
                             new ArrayValidator(arrayVal.requiredConcepts.subList(1, arrayVal.requiredConcepts.size())),
-                            availableConcepts.subList(1, availableConcepts.size()),
+                            costSolution.remainingItems,
                             ImmutableList.<ConceptTrace>builder()
                                     .addAll(partialSolution)
-                                    .addAll(costSolution.remainingItems)
+                                    .addAll(costSolution.costSolution)
                                     .build(),
                             true,
                             ImmutableList.<ConceptTrace>builder()
@@ -173,9 +199,9 @@ public class SolutionChecker {
                     new SolutionChecker(
                             setValidator.requiredConcepts.get(i),
                             availableConcepts,
-                            partialSolution,
+                            ImmutableList.of(),
                             startedConsuming,
-                            skippedConcepts
+                            ImmutableList.of()
                     )
             );
 
@@ -187,7 +213,10 @@ public class SolutionChecker {
                 possibleSolutionCheckers.add(new SolutionChecker(
                         new SetValidator(builder.build()),
                         costSolution.remainingItems,
-                        costSolution.costSolution,
+                        ImmutableList.<ConceptTrace>builder()
+                                .addAll(partialSolution)
+                                .addAll(costSolution.costSolution)
+                                .build(),
                         true,
                         ImmutableList.<ConceptTrace>builder()
                                 .addAll(skippedConcepts)
@@ -195,20 +224,6 @@ public class SolutionChecker {
                                 .build()
                 ));
             }
-        }
-
-        return possibleSolutionCheckers;
-    }
-
-    public ArrayList<SolutionChecker> consumeTrace() {
-        ArrayList<SolutionChecker> possibleSolutionCheckers = new ArrayList<>();
-
-        if(requiredConcepts instanceof ConceptTrace) {
-            possibleSolutionCheckers.add(consumeTrace((ConceptTrace)requiredConcepts));
-        } else if(requiredConcepts instanceof ArrayValidator) {
-            possibleSolutionCheckers.addAll(consumeTrace((ArrayValidator)requiredConcepts));
-        } else if(requiredConcepts instanceof SetValidator) {
-            possibleSolutionCheckers.addAll(consumeTrace((SetValidator)requiredConcepts));
         }
 
         return possibleSolutionCheckers;

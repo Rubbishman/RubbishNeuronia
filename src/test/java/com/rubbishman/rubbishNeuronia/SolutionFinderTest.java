@@ -3,7 +3,10 @@ package com.rubbishman.rubbishNeuronia;
 import com.google.common.collect.ImmutableList;
 import com.rubbishman.rubbishNeuronia.reducer.costValidator.SolutionFinder;
 import com.rubbishman.rubbishNeuronia.reducer.costValidator.CostSolution;
+import com.rubbishman.rubbishNeuronia.reducer.costValidator.costTypes.CostType;
 import com.rubbishman.rubbishNeuronia.state.brain.Concept;
+import com.rubbishman.rubbishNeuronia.state.cost.ArrayValidator;
+import com.rubbishman.rubbishNeuronia.state.cost.SetValidator;
 import com.rubbishman.rubbishNeuronia.state.cost.concept.ConceptTrace;
 import com.rubbishman.rubbishRedux.internal.dynamicObjectStore.GsonInstance;
 import org.junit.Test;
@@ -23,11 +26,11 @@ public class SolutionFinderTest {
         public static Collection<Object[]> data() {
             return ImmutableList.of(
                 new Object[] {
-                    ImmutableList.of(
+                    new ArrayValidator(ImmutableList.of(
                             Concept.ORANGE.pickup(),
                             Concept.BLUE.pickup(),
                             Concept.RED.pickup()
-                    ),
+                    )),
                     ImmutableList.of(
                             Concept.TEAL.pickup(),
                             Concept.ORANGE.pickup(),
@@ -43,13 +46,13 @@ public class SolutionFinderTest {
                     ))
                 },
                 new Object[] {
-                    ImmutableList.of(
+                    new ArrayValidator(ImmutableList.of(
                             Concept.ORANGE.pickup(),
                             Concept.BLUE.pickup(),
                             Concept.RED.pickup(),
                             Concept.GREEN.pickup(),
                             Concept.GREEN.pickup()
-                    ),
+                    )),
                     ImmutableList.of(
                             Concept.TEAL.pickup(),
                             Concept.ORANGE.pickup(),
@@ -60,13 +63,13 @@ public class SolutionFinderTest {
                     ImmutableList.of()
                 },
                 new Object[] {
-                    ImmutableList.of(
+                    new ArrayValidator(ImmutableList.of(
                             Concept.ORANGE.pickup(),
                             Concept.BLUE.pickup(),
                             Concept.RED.pickup(),
                             Concept.GREEN.pickup(),
                             Concept.GREEN.pickup()
-                    ),
+                    )),
                     ImmutableList.of(
                             Concept.TEAL.pickup(),
                             Concept.ORANGE.pickup(),
@@ -83,11 +86,11 @@ public class SolutionFinderTest {
                     ))
                 },
                 new Object[] {
-                    ImmutableList.of(
+                    new ArrayValidator(ImmutableList.of(
                             Concept.ORANGE.pickup(),
                             Concept.BLUE.stepOver(),
                             Concept.RED.pickup()
-                    ),
+                    )),
                     ImmutableList.of(
                             Concept.ORANGE.pickup(),
                             Concept.BLUE.stepOver(),
@@ -111,11 +114,11 @@ public class SolutionFinderTest {
                     )
                 },
                 new Object[] {
-                    ImmutableList.of(
+                    new ArrayValidator(ImmutableList.of(
                             Concept.ORANGE.pickup(),
                             Concept.BLUE.pickup(),
                             Concept.RED.pickup()
-                    ),
+                    )),
                     ImmutableList.of(
                             Concept.ORANGE.pickup(),
                             Concept.BLUE.pickup(),
@@ -139,16 +142,78 @@ public class SolutionFinderTest {
                                     0
                             )
                     )
-                }
+                },
+                    new Object[] {
+                            new SetValidator(ImmutableList.of(
+                                    Concept.BLUE.pickup(),
+                                    Concept.ORANGE.pickup(),
+                                    Concept.GREEN.pickup()
+                            )),
+                            ImmutableList.of(
+                                    Concept.TEAL.pickup(),
+                                    Concept.ORANGE.pickup(),
+                                    Concept.BLUE.pickup(),
+                                    Concept.RED.pickup(),
+                                    Concept.GREEN.pickup()
+                            ),
+                            ImmutableList.of(
+                                    new CostSolutionAssertion(
+                                            0,
+                                            3,
+                                            0,
+                                            2
+                                    )
+                            )
+                    },
+                    new Object[] {
+                            new SetValidator(ImmutableList.of(
+                                    Concept.BLUE.pickup(),
+                                    Concept.ORANGE.pickup(),
+                                    Concept.GREEN.pickup(),
+                                    Concept.GREEN.pickup()
+                            )),
+                            ImmutableList.of(
+                                    Concept.TEAL.pickup(),
+                                    Concept.ORANGE.pickup(),
+                                    Concept.BLUE.pickup(),
+                                    Concept.RED.pickup(),
+                                    Concept.GREEN.pickup()
+                            ),
+                            ImmutableList.of()
+                    },
+                    new Object[] {
+                            new SetValidator(ImmutableList.of(
+                                    Concept.BLUE.pickup(),
+                                    Concept.ORANGE.pickup(),
+                                    Concept.GREEN.pickup(),
+                                    Concept.GREEN.pickup()
+                            )),
+                            ImmutableList.of(
+                                    Concept.TEAL.pickup(),
+                                    Concept.ORANGE.pickup(),
+                                    Concept.GREEN.pickup(),
+                                    Concept.BLUE.pickup(),
+                                    Concept.RED.pickup(),
+                                    Concept.GREEN.pickup()
+                            ),
+                            ImmutableList.of(
+                                    new CostSolutionAssertion(
+                                            0,
+                                            4,
+                                            0,
+                                            2
+                                    )
+                            )
+                    }
             );
         }
 
-        private ImmutableList<ConceptTrace> requiredConcepts;
+        private CostType requiredConcepts;
         private ImmutableList<ConceptTrace> availableConcepts;
         private List<CostSolutionAssertion> solutionAssertions;
 
         public SolutionFinderTest(
-                ImmutableList<ConceptTrace> requiredConcepts,
+                CostType requiredConcepts,
                 ImmutableList<ConceptTrace> availableConcepts,
                 List<CostSolutionAssertion> solutionAssertions
         ) {
