@@ -1,6 +1,7 @@
 package com.rubbishman.rubbishNeuronia.reducer.costValidator;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 import com.rubbishman.rubbishNeuronia.reducer.costValidator.costTypes.CostType;
 import com.rubbishman.rubbishNeuronia.reducer.costValidator.costTypes.NullCostType;
 import com.rubbishman.rubbishNeuronia.state.cost.ArrayValidator;
@@ -155,7 +156,9 @@ public class SolutionChecker {
     public ArrayList<SolutionChecker> consumeTrace(ArrayValidator arrayVal) {
         ArrayList<SolutionChecker> possibleSolutionCheckers = new ArrayList<>();
 
-        List<CostSolution> solutions = SolutionFinder.processTrace(
+        ImmutableSet.Builder<CostSolution> solutions = ImmutableSet.<CostSolution>builder();
+
+        solutions.addAll(SolutionFinder.processTrace(
                 new SolutionChecker(
                         arrayVal.requiredConcepts.get(0),
                         availableConcepts,
@@ -163,9 +166,9 @@ public class SolutionChecker {
                         startedConsuming,
                         ImmutableList.of()
                 )
-        );
+        ));
 
-        for(CostSolution costSolution: solutions) {
+        for(CostSolution costSolution: solutions.build()) {
             possibleSolutionCheckers.add(
                     new SolutionChecker(
                             new ArrayValidator(arrayVal.requiredConcepts.subList(1, arrayVal.requiredConcepts.size())),
@@ -195,7 +198,9 @@ public class SolutionChecker {
                 builder.add(setValidator.requiredConcepts.get(pre));
             }
 
-            List<CostSolution> solutions = SolutionFinder.processTrace(
+            ImmutableSet.Builder<CostSolution> solutions = ImmutableSet.<CostSolution>builder();
+
+            solutions.addAll(SolutionFinder.processTrace(
                     new SolutionChecker(
                             setValidator.requiredConcepts.get(i),
                             availableConcepts,
@@ -203,13 +208,13 @@ public class SolutionChecker {
                             startedConsuming,
                             ImmutableList.of()
                     )
-            );
+            ));
 
             for(int post = i+1; post < setValidator.requiredConcepts.size(); post++) {
                 builder.add(setValidator.requiredConcepts.get(post));
             }
 
-            for(CostSolution costSolution: solutions) {
+            for(CostSolution costSolution: solutions.build()) {
                 possibleSolutionCheckers.add(new SolutionChecker(
                         new SetValidator(builder.build()),
                         costSolution.remainingItems,

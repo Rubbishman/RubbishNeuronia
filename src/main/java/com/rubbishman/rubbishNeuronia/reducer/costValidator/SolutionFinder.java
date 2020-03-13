@@ -1,6 +1,7 @@
 package com.rubbishman.rubbishNeuronia.reducer.costValidator;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 import com.rubbishman.rubbishNeuronia.reducer.costValidator.costTypes.CostType;
 import com.rubbishman.rubbishNeuronia.state.cost.concept.ConceptTrace;
 
@@ -16,38 +17,26 @@ public class SolutionFinder {
         );
 
         if (!solChecker.isSolved()) { //If it counts as solved... We have empty input
-            return removeDuplicates(processTrace(new SolutionChecker(
+            return processTrace(new SolutionChecker(
                     requiredConcepts,
                     availableConcepts
-            )));
+            )).asList();
         }
 
         return new LinkedList<>();
     }
 
-    private static List<CostSolution> removeDuplicates(List<CostSolution> rawSolutions) {
-        List<CostSolution> solutions = new ArrayList<>();
-
-        for(CostSolution costSolution: rawSolutions) {
-            if(!solutions.contains(costSolution)) {
-                solutions.add(costSolution);
-            }
-        }
-
-        return solutions;
-    }
-
-    protected static List<CostSolution> processTrace(SolutionChecker solutionChecker) {
-        List<CostSolution> solutions = new LinkedList<>();
+    protected static ImmutableSet<CostSolution> processTrace(SolutionChecker solutionChecker) {
+        ImmutableSet.Builder<CostSolution> solutions = ImmutableSet.<CostSolution>builder();
 
         if (solutionChecker.isSolved()) {
             solutions.add(solutionChecker.toCostSolution());
 
-            return solutions;
+            return solutions.build();
         }
 
         if (solutionChecker.unsolvable()) {
-            return solutions;
+            return solutions.build();
         }
 
         //Move to the next available and see if we can solve from that instead
@@ -71,6 +60,6 @@ public class SolutionFinder {
             }
         }
 
-        return solutions;
+        return solutions.build();
     }
 }
