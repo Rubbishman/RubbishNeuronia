@@ -27,16 +27,16 @@ public class SolutionFinderTest {
             return ImmutableList.of(
                 new Object[] {
                     new ArrayValidator(ImmutableList.of(
-                            Concept.ORANGE.pickup(),
-                            Concept.BLUE.pickup(),
-                            Concept.RED.pickup()
+                        Concept.ORANGE.pickup(),
+                        Concept.BLUE.pickup(),
+                        Concept.RED.pickup()
                     )),
                     ImmutableList.of(
-                            Concept.TEAL.pickup(),
-                            Concept.ORANGE.pickup(),
-                            Concept.BLUE.pickup(),
-                            Concept.RED.pickup(),
-                            Concept.GREEN.pickup()
+                        Concept.TEAL.pickup(),
+                        Concept.ORANGE.pickup(),
+                        Concept.BLUE.pickup(),
+                        Concept.RED.pickup(),
+                        Concept.GREEN.pickup()
                     ),
                     ImmutableList.of(new CostSolutionAssertion(
                             0,
@@ -47,36 +47,36 @@ public class SolutionFinderTest {
                 },
                 new Object[] {
                     new ArrayValidator(ImmutableList.of(
-                            Concept.ORANGE.pickup(),
-                            Concept.BLUE.pickup(),
-                            Concept.RED.pickup(),
-                            Concept.GREEN.pickup(),
-                            Concept.GREEN.pickup()
+                        Concept.ORANGE.pickup(),
+                        Concept.BLUE.pickup(),
+                        Concept.RED.pickup(),
+                        Concept.GREEN.pickup(),
+                        Concept.GREEN.pickup()
                     )),
                     ImmutableList.of(
-                            Concept.TEAL.pickup(),
-                            Concept.ORANGE.pickup(),
-                            Concept.BLUE.pickup(),
-                            Concept.RED.pickup(),
-                            Concept.GREEN.pickup()
+                        Concept.TEAL.pickup(),
+                        Concept.ORANGE.pickup(),
+                        Concept.BLUE.pickup(),
+                        Concept.RED.pickup(),
+                        Concept.GREEN.pickup()
                     ),
                     ImmutableList.of()
                 },
                 new Object[] {
                     new ArrayValidator(ImmutableList.of(
-                            Concept.ORANGE.pickup(),
-                            Concept.BLUE.pickup(),
-                            Concept.RED.pickup(),
-                            Concept.GREEN.pickup(),
-                            Concept.GREEN.pickup()
+                        Concept.ORANGE.pickup(),
+                        Concept.BLUE.pickup(),
+                        Concept.RED.pickup(),
+                        Concept.GREEN.pickup(),
+                        Concept.GREEN.pickup()
                     )),
                     ImmutableList.of(
-                            Concept.TEAL.pickup(),
-                            Concept.ORANGE.pickup(),
-                            Concept.BLUE.pickup(),
-                            Concept.RED.pickup(),
-                            Concept.GREEN.pickup(),
-                            Concept.GREEN.pickup()
+                        Concept.TEAL.pickup(),
+                        Concept.ORANGE.pickup(),
+                        Concept.BLUE.pickup(),
+                        Concept.RED.pickup(),
+                        Concept.GREEN.pickup(),
+                        Concept.GREEN.pickup()
                     ),
                     ImmutableList.of(new CostSolutionAssertion(
                             0,
@@ -87,26 +87,20 @@ public class SolutionFinderTest {
                 },
                 new Object[] {
                     new ArrayValidator(ImmutableList.of(
-                            Concept.ORANGE.pickup(),
-                            Concept.BLUE.stepOver(),
-                            Concept.RED.pickup()
+                        Concept.ORANGE.pickup(),
+                        Concept.BLUE.stepOver(),
+                        Concept.RED.pickup()
                     )),
                     ImmutableList.of(
-                            Concept.ORANGE.pickup(),
-                            Concept.BLUE.stepOver(),
-                            Concept.RED.stepOver(),
-                            Concept.BLUE.stepOver(),
-                            Concept.RED.pickup()
+                        Concept.ORANGE.pickup(),
+                        Concept.BLUE.stepOver(),
+                        Concept.RED.stepOver(),
+                        Concept.BLUE.stepOver(),
+                        Concept.RED.pickup()
                     ),
                     ImmutableList.of(
                         new CostSolutionAssertion(
                                 0,
-                                3,
-                                0,
-                                3
-                        ),
-                        new CostSolutionAssertion(
-                                1,
                                 3,
                                 0,
                                 3
@@ -115,96 +109,96 @@ public class SolutionFinderTest {
                 },
                 new Object[] {
                     new ArrayValidator(ImmutableList.of(
-                            Concept.ORANGE.pickup(),
-                            Concept.BLUE.pickup(),
-                            Concept.RED.pickup()
+                        Concept.ORANGE.pickup(),
+                        Concept.BLUE.pickup(),
+                        Concept.RED.pickup()
                     )),
                     ImmutableList.of(
-                            Concept.ORANGE.pickup(),
-                            Concept.BLUE.pickup(),
-                            Concept.RED.pickup(),
-                            Concept.BLUE.pickup(),
-                            Concept.ORANGE.pickup(),
-                            Concept.BLUE.pickup(),
-                            Concept.RED.pickup()
+                        Concept.ORANGE.pickup(),
+                        Concept.BLUE.pickup(),
+                        Concept.RED.pickup(),
+                        Concept.BLUE.pickup(),
+                        Concept.ORANGE.pickup(),
+                        Concept.BLUE.pickup(),
+                        Concept.RED.pickup()
                     ),
                     ImmutableList.of(
-                            new CostSolutionAssertion(
-                                    0,
-                                    3,
-                                    0,
-                                    4
-                            ),
-                            new CostSolutionAssertion(
-                                    1,
-                                    3,
-                                    4,
-                                    0
-                            )
+                        new CostSolutionAssertion(
+                                0,
+                                3,
+                                0,
+                                4
+                        ),
+                        new CostSolutionAssertion(
+                                1,
+                                3,
+                                4,
+                                0
+                        )
                     )
                 },
-                    new Object[] {
-                            new SetValidator(ImmutableList.of(
-                                    Concept.BLUE.pickup(),
-                                    Concept.ORANGE.pickup(),
-                                    Concept.GREEN.pickup()
-                            )),
-                            ImmutableList.of(
-                                    Concept.TEAL.pickup(),
-                                    Concept.ORANGE.pickup(),
-                                    Concept.BLUE.pickup(),
-                                    Concept.RED.pickup(),
-                                    Concept.GREEN.pickup()
-                            ),
-                            ImmutableList.of(
-                                    new CostSolutionAssertion(
-                                            0,
-                                            3,
-                                            0,
-                                            2
-                                    )
-                            )
-                    },
-                    new Object[] {
-                            new SetValidator(ImmutableList.of(
-                                    Concept.BLUE.pickup(),
-                                    Concept.ORANGE.pickup(),
-                                    Concept.GREEN.pickup(),
-                                    Concept.GREEN.pickup()
-                            )),
-                            ImmutableList.of(
-                                    Concept.TEAL.pickup(),
-                                    Concept.ORANGE.pickup(),
-                                    Concept.BLUE.pickup(),
-                                    Concept.RED.pickup(),
-                                    Concept.GREEN.pickup()
-                            ),
-                            ImmutableList.of()
-                    },
-                    new Object[] {
-                            new SetValidator(ImmutableList.of(
-                                    Concept.BLUE.pickup(),
-                                    Concept.ORANGE.pickup(),
-                                    Concept.GREEN.pickup(),
-                                    Concept.GREEN.pickup()
-                            )),
-                            ImmutableList.of(
-                                    Concept.TEAL.pickup(),
-                                    Concept.ORANGE.pickup(),
-                                    Concept.GREEN.pickup(),
-                                    Concept.BLUE.pickup(),
-                                    Concept.RED.pickup(),
-                                    Concept.GREEN.pickup()
-                            ),
-                            ImmutableList.of(
-                                    new CostSolutionAssertion(
-                                            0,
-                                            4,
-                                            0,
-                                            2
-                                    )
-                            )
-                    }
+                new Object[] {
+                    new SetValidator(ImmutableList.of(
+                        Concept.BLUE.pickup(),
+                        Concept.ORANGE.pickup(),
+                        Concept.GREEN.pickup()
+                    )),
+                    ImmutableList.of(
+                        Concept.TEAL.pickup(),
+                        Concept.ORANGE.pickup(),
+                        Concept.BLUE.pickup(),
+                        Concept.RED.pickup(),
+                        Concept.GREEN.pickup()
+                    ),
+                    ImmutableList.of(
+                        new CostSolutionAssertion(
+                0,
+                3,
+                0,
+                2
+                        )
+                    )
+                },
+                new Object[] {
+                    new SetValidator(ImmutableList.of(
+                        Concept.BLUE.pickup(),
+                        Concept.ORANGE.pickup(),
+                        Concept.GREEN.pickup(),
+                        Concept.GREEN.pickup()
+                    )),
+                    ImmutableList.of(
+                        Concept.TEAL.pickup(),
+                        Concept.ORANGE.pickup(),
+                        Concept.BLUE.pickup(),
+                        Concept.RED.pickup(),
+                        Concept.GREEN.pickup()
+                    ),
+                    ImmutableList.of()
+                },
+                new Object[] {
+                    new SetValidator(ImmutableList.of(
+                        Concept.BLUE.pickup(),
+                        Concept.ORANGE.pickup(),
+                        Concept.GREEN.pickup(),
+                        Concept.GREEN.pickup()
+                    )),
+                    ImmutableList.of(
+                        Concept.TEAL.pickup(),
+                        Concept.ORANGE.pickup(),
+                        Concept.GREEN.pickup(),
+                        Concept.BLUE.pickup(),
+                        Concept.RED.pickup(),
+                        Concept.GREEN.pickup()
+                    ),
+                    ImmutableList.of(
+                        new CostSolutionAssertion(
+                                0,
+                                4,
+                                0,
+                                2
+                        )
+                    )
+                }
             );
         }
 

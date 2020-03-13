@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.rubbishman.rubbishNeuronia.reducer.costValidator.costTypes.CostType;
 import com.rubbishman.rubbishNeuronia.state.cost.concept.ConceptTrace;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -15,13 +16,25 @@ public class SolutionFinder {
         );
 
         if (!solChecker.isSolved()) { //If it counts as solved... We have empty input
-            return processTrace(new SolutionChecker(
+            return removeDuplicates(processTrace(new SolutionChecker(
                     requiredConcepts,
                     availableConcepts
-            ));
+            )));
         }
 
         return new LinkedList<>();
+    }
+
+    private static List<CostSolution> removeDuplicates(List<CostSolution> rawSolutions) {
+        List<CostSolution> solutions = new ArrayList<>();
+
+        for(CostSolution costSolution: rawSolutions) {
+            if(!solutions.contains(costSolution)) {
+                solutions.add(costSolution);
+            }
+        }
+
+        return solutions;
     }
 
     protected static List<CostSolution> processTrace(SolutionChecker solutionChecker) {
