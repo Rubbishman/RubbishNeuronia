@@ -152,10 +152,10 @@ public class SolutionFinderTest {
                     ),
                     ImmutableList.of(
                         new CostSolutionAssertion(
-                0,
-                3,
-                0,
-                2
+                            0,
+                            3,
+                            0,
+                            2
                         )
                     )
                 },
